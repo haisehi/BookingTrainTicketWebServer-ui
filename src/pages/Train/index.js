@@ -48,6 +48,23 @@ function Train() {
             .catch((error) => console.error(error));
     };
 
+    const handleViewATrain = (trainId) => {
+        // Gửi yêu cầu GET đến máy chủ để lấy thông tin tàu cụ thể
+        fetch(`${apiURL}/v1/train/${trainId}`)
+            .then((response) => response.json())
+            .then((train) => {
+                // Hiển thị thông tin tàu trong cửa sổ hoặc cửa sổ mới, hoặc bạn có thể thực hiện hiển thị theo ý của bạn.
+                console.log(train); // Hiển thị dữ liệu tàu trong console hoặc bạn có thể hiển thị nó trên giao diện người dùng.
+                // Trích xuất thông tin từ mảng rooms
+                const roomsInfo = train.rooms.map((room) => {
+                    return `Room Number: ${room.roomNumber}, Kind: ${room.kind}, count Chair: ${room.countChair}`;
+                });
+
+                alert(`Train: ${train.train}, Count Room: ${train.countRoom},rooms: [${roomsInfo.join(', ')} ]`);
+            })
+            .catch((error) => console.error(error));
+    };
+
 
     const handleEdit = (index) => {
         setEditingIndex(index);
@@ -141,7 +158,7 @@ function Train() {
                 <thead>
                     <tr>
                         <th>Train</th>
-                        <th>coutRoom</th>
+                        <th>Count Room</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -152,7 +169,7 @@ function Train() {
                             <td>{item.countRoom}</td>
                             <td>
                                 <button className={cx('train-btn2')} onClick={() => handleEdit(index)}>Edit</button>
-                                <button className={cx('train-btn3')} >view</button>
+                                <button className={cx('train-btn3')} onClick={() => handleViewATrain(item._id)}>View</button>
                                 <button className={cx('train-btn4')} onClick={() => handleDelete(index)}>Delete</button>
                             </td>
                         </tr>
