@@ -84,7 +84,7 @@ function Chair() {
         return room ? room.roomNumber : "Unknown";
     }
     //xem chi tiết ghế ghế
-    const handleViewARoom = (chair) => {
+    const handleViewAChair = (chair) => {
         // Gửi yêu cầu GET đến máy chủ để lấy thông tin ghế cụ thể
         fetch(`${apiURL}/v1/chair/${chair}`)
             .then((response) => response.json())
@@ -92,11 +92,11 @@ function Chair() {
                 // Hiển thị thông tin ghế trong cửa sổ hoặc cửa sổ mới, hoặc bạn có thể thực hiện hiển thị theo ý của bạn.
                 console.log(chairs); // Hiển thị dữ liệu ghế trong console hoặc bạn có thể hiển thị nó trên giao diện người dùng.
                 // Trích xuất thông tin từ mảng chairs
-                const rooms = chairs.rooms.map((chair) => {
-                    return `Room: ${chair.roomNumber}, count chair: ${chair.countChair}, kind: ${chair.kind}`;
-                });
+                // const roomInfor = chairs.rooms.map((chair) => {
+                //     return `Room: ${chair.roomNumber}, count chair: ${chair.countChair}, kind: ${chair.kind}`;
+                // });
 
-                alert(`chair number: ${chairs.numberChair},count Chair: ${chairs.kind}, Kind: ${chairs.state}, rooms: [${rooms.join(', ')} ]`);
+                alert(`chair number: ${chairs.numberChair},count Chair: ${chairs.kind}, Kind: ${chairs.state}, rooms : ${chairs.rooms.roomNumber} ,kind of room : ${chairs.rooms.kind},rooms : ${chairs.rooms.train}`);
             })
             .catch((error) => console.error(error));
     };
@@ -251,7 +251,7 @@ function Chair() {
                             <td>{findRoomID(item.rooms)}</td>
                             <td>
                                 <button className={cx('train-btn2')} onClick={() => handleEdit(index)}>Edit</button>
-                                <button className={cx('train-btn3')} onClick={() => handleViewARoom(item._id)}>View</button>
+                                <button className={cx('train-btn3')} onClick={() => handleViewAChair(item._id)}>View</button>
                                 <button className={cx('train-btn4')} onClick={() => handleDelete(index)}>Delete</button>
                             </td>
                         </tr>
