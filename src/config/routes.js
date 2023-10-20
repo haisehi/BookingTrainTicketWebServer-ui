@@ -1,7 +1,7 @@
 const routes = {
     train:'/',
     room:'/room',
-    chair:'/chair',
+    station:'/station',
     ticket:'/ticket',
     customer:'/customer'
 }

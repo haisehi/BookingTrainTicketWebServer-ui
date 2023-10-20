@@ -77,11 +77,12 @@ function Room() {
                 // Hiển thị thông tin toa trong cửa sổ hoặc cửa sổ mới, hoặc bạn có thể thực hiện hiển thị theo ý của bạn.
                 console.log(rooms); // Hiển thị dữ liệu toa trong console hoặc bạn có thể hiển thị nó trên giao diện người dùng.
                 // Trích xuất thông tin từ mảng rooms
-                const chairInfo = rooms.chairs.map((room) => {
-                    return `Chair: ${room.numberChair}, Kind: ${room.kind}, state: ${room.state}`;
+                const ticket = rooms.ticket.map((room) => {
+                    return `Chair: ${room.id}, state: ${room.state}, price: ${room.price}`;
                 });
+                console.log(ticket);
 
-                alert(`Room number: ${rooms.roomNumber},count Chair: ${rooms.countChair}, Kind: ${rooms.kind},train:${rooms.train}, Chairs: [${chairInfo.join(', ')} ]`);
+                alert(`Room number: ${rooms.roomNumber},count Chair: ${rooms.countChair}, Kind: ${rooms.kind},train:${rooms.train}, ticket: [${ticket.join(', ')} ]`);
             })
             .catch((error) => console.error(error));
     };
