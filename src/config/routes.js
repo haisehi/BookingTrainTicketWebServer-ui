@@ -1,5 +1,7 @@
 const routes = {
-    train:'/',
+    login:'/',
+    register:'/register',
+    train:'/train',
     room:'/room',
     station:'/station',
     ticket:'/ticket',

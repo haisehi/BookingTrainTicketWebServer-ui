@@ -2,6 +2,7 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 
 import {PublicRoute} from './routes'
 import mainLayout from './layout/mainLayout';
+import LoginLayout from './layout/loginLayout';
 
 function App() {
   return (
@@ -13,6 +14,9 @@ function App() {
             let Layout = mainLayout
             if(route.layout){
               Layout=route.layout
+            }
+            else if(route.layout === LoginLayout){
+              Layout = route.LoginLayout
             }
             return(
               <Route key={index} 

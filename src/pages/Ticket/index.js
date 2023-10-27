@@ -45,9 +45,9 @@ function Ticket() {
 
     const handleAdd = (e) => {
         e.preventDefault();
-    
+
         // Gửi yêu cầu POST đến máy chủ
-        fetch(`${apiURL}/v1/ticket`, {
+        fetch(`${apiURL}/v1/tickets`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -75,16 +75,17 @@ function Ticket() {
                     state: false,
                     rooms: ''
                 });
+                console.log(newTicket)
             })
             .catch((error) => console.error(error));
     };
-    
-    
+
+
     //xong
     const handleView = (e) => {
         e.preventDefault(); // Ngăn chặn trình duyệt tải lại trang
         // Gửi yêu cầu GET đến máy chủ để lấy danh sách tàu
-        fetch(`${apiURL}/v1/ticket`)
+        fetch(`${apiURL}/v1/tickets`)
             .then((response) => response.json())
             .then((trains) => {
                 // Cập nhật danh sách tàu trong trạng thái (state) của ứng dụng React
@@ -95,7 +96,7 @@ function Ticket() {
     //xong
     const handleViewATicket = (ticket) => {
         // Gửi yêu cầu GET đến máy chủ để lấy thông tin tàu cụ thể
-        fetch(`${apiURL}/v1/ticket/${ticket}`)
+        fetch(`${apiURL}/v1/tickets/${ticket}`)
             .then((response) => response.json())
             .then((ticket) => {
                 // Hiển thị thông tin tàu trong cửa sổ hoặc cửa sổ mới, hoặc bạn có thể thực hiện hiển thị theo ý của bạn.
@@ -148,7 +149,7 @@ function Ticket() {
         const station = stationList.find(station => station._id === stations);
         return station ? station.NameStation : "Unknown";
     }
-//----------------------------------------------------------------
+    //----------------------------------------------------------------
     //xong
     const handleEdit = (index) => {
         setEditingIndex(index);
@@ -165,7 +166,7 @@ function Ticket() {
         const ticketID = data[editingIndex]._id;
 
         // Gửi yêu cầu PUT đến máy chủ để cập nhật tàu
-        fetch(`${apiURL}/v1/ticket/${ticketID}`, {
+        fetch(`${apiURL}/v1/tickets/${ticketID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -203,7 +204,7 @@ function Ticket() {
         // Lấy _id của tàu cần xóa từ data
         const ticketIDToDelete = data[index]._id;
         // Gửi yêu cầu DELETE đến máy chủ
-        fetch(`${apiURL}/v1/ticket/${ticketIDToDelete}`, {
+        fetch(`${apiURL}/v1/tickets/${ticketIDToDelete}`, {
             method: 'DELETE',
         })
             .then(() => {
@@ -273,37 +274,21 @@ function Ticket() {
                     </div>
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Time Go Departure</label>
-
-                        <select
+                        <input
                             name="timeGodeparture"
                             value={formData.timeGodeparture}
                             onChange={handleInputChange}
-                        >
-                            <option>Choice time</option>
-                            <option value="All Times">All time</option>
-                            <option value="0h to 6h">0h to 6h</option>
-                            <option value="6h to 12h">6h to 12h</option>
-                            <option value="12h to 18h">12h to 18h</option>
-                            <option value="18h to 0h">18h to 0h</option>
-
-                        </select>
+                            type="time"
+                        />
                     </div>
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Time To Departure</label>
-
-                        <select
+                        <input
+                            type="time"
                             name="timeTodeparture"
                             value={formData.timeTodeparture}
                             onChange={handleInputChange}
-                        >
-                            <option>Choice time</option>
-                            <option value="All Times">All time</option>
-                            <option value="0h to 6h">0h to 6h</option>
-                            <option value="6h to 12h">6h to 12h</option>
-                            <option value="12h to 18h">12h to 18h</option>
-                            <option value="18h to 0h">18h to 0h</option>
-
-                        </select>
+                        />
                     </div>
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Time Go Return</label>
