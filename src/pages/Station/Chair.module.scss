@@ -10,7 +10,7 @@
 .train-form{
     height: 400px;
     width: 70%;
-    background-color: #96bccc;
+    background-color: var(--bg-form-2);
     margin-top: 30px;
     margin-right: 50%;
     margin-left: 50%;
@@ -45,7 +45,7 @@
 .train-btn{
     width: 70%;
     height: 30px;
-    color: white;
+    color: var(--white-color);
     margin: 20px 50%;
     transform: translateX(-50%);
     display: flex;
@@ -54,13 +54,13 @@
 .train-btn1{
     width: 80%;
     color: var(--white-color);
-    background-color: #ff0000;
+    background-color: var(--red-color);
     border-radius: 20px;
 }
 .train-btn2{
     width: 80%;
     color: var(--white-color);
-    background-color: #038c18;
+    background-color: var(--green);
     border-radius: 20px;
 }
 //view
@@ -74,14 +74,14 @@ thead{
     background-color: rgb(220, 242, 245);
 }
 tbody{
-    background-color: #96bccc;
+    background-color: var(--bg-form-2);
 }
 tbody td{
     text-align: center;
 }
 .train-btn3{
     width: 80%;
-    background-color: #038c18;
+    background-color: var(--green);
     color: var(--white-color);
     border-radius: 20px;
 }
@@ -91,3 +91,4 @@ tbody td{
     color: var(--white-color);
     border-radius: 20px;
 }
+

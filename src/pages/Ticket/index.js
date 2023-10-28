@@ -28,8 +28,23 @@ function Ticket() {
     const [editingIndex, setEditingIndex] = useState(null);
     const [RoomList, setRoomList] = useState([]);  // State để lưu danh sách toa
     const [stationList, setstationList] = useState([]);  // State để lưu danh sách toa
+    //pages
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // Số lượng mục trên mỗi trang
+    // Tính tổng số trang 
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+    //Tính chỉ số bắt đầu của dữ liệu trên trang
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    //Tính chỉ số kết thúc của dữ liệu trên trang hiện tại
+    const endIndex = startIndex + itemsPerPage;
+    //Tạo một mảng currentData chứa dữ liệu của trang hiện tại 
+    const currentData = data.slice(startIndex, endIndex);
+    //cập nhật trang hiện tại khi người dùng chọn trang khác
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
 
-
+    //REST API
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
 
@@ -45,14 +60,13 @@ function Ticket() {
 
     const handleAdd = (e) => {
         e.preventDefault();
-
         // Gửi yêu cầu POST đến máy chủ
         fetch(`${apiURL}/v1/tickets`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(formData),
+            body: JSON.stringify({ ...formData}),
         })
             .then((response) => response.json())
             .then((newTicket) => {
@@ -103,7 +117,7 @@ function Ticket() {
                 console.log(ticket); // Hiển thị dữ liệu tàu trong console hoặc bạn có thể hiển thị nó trên giao diện người dùng.
                 // Trích xuất thông tin từ mảng rooms
 
-                alert(`from: ${ticket.form}, to: ${ticket.to}, chair number: ${ticket.rooms.roomNumber}`);
+                alert(`from: ${ticket.from}, to: ${ticket.to}, chair number: ${ticket.rooms.nameTrain}`);
             })
             .catch((error) => console.error(error));
     };
@@ -128,6 +142,7 @@ function Ticket() {
         const room = RoomList.find(room => room._id === rooms);
         return room ? room.roomNumber : "Unknown";
     }
+
     //----------------------------------------------------------------
     //xem danh sách trạm
     useEffect(() => {
@@ -228,11 +243,12 @@ function Ticket() {
                             name="from"
                             value={formData.from}
                             onChange={handleInputChange}
+                            className={cx('custom-select')}
                         >
                             <option value="">Choice station</option>
                             {stationList.map((items, index) => (
                                 <option key={index} value={items.NameStation}>
-                                    {items.NameStation}
+                                    {items.NameStation} - {items.address}
                                 </option>
                             ))}
                         </select>
@@ -243,11 +259,12 @@ function Ticket() {
                             name="to"
                             value={formData.to}
                             onChange={handleInputChange}
+                            className={cx('custom-select')}
                         >
                             <option value="">Choice station</option>
                             {stationList.map((items, index) => (
                                 <option key={index} value={items.NameStation}>
-                                    {items.NameStation}
+                                    {items.NameStation} - {items.address}
                                 </option>
                             ))}
                         </select>
@@ -292,37 +309,21 @@ function Ticket() {
                     </div>
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Time Go Return</label>
-
-                        <select
+                        <input
+                            type="time"
                             name="timeGoreturn"
                             value={formData.timeGoreturn}
                             onChange={handleInputChange}
-                        >
-                            <option>Choice time</option>
-                            <option value="All Times">All time</option>
-                            <option value="0h to 6h">0h to 6h</option>
-                            <option value="6h to 12h">6h to 12h</option>
-                            <option value="12h to 18h">12h to 18h</option>
-                            <option value="18h to 0h">18h to 0h</option>
-
-                        </select>
+                        />
                     </div>
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Time To Return</label>
-
-                        <select
+                        <input
+                            type="time"
                             name="timeToreturn"
                             value={formData.timeToreturn}
                             onChange={handleInputChange}
-                        >
-                            <option>Choice time</option>
-                            <option value="All Times">All time</option>
-                            <option value="0h to 6h">0h to 6h</option>
-                            <option value="6h to 12h">6h to 12h</option>
-                            <option value="12h to 18h">12h to 18h</option>
-                            <option value="18h to 0h">18h to 0h</option>
-
-                        </select>
+                        />
                     </div>
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Ticket Type</label>
@@ -446,7 +447,7 @@ function Ticket() {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => (
+                    {currentData.map((item, index) => (
                         <tr key={index}>
                             <td>{item.from}</td>
                             <td>{item.to}</td>
@@ -471,6 +472,15 @@ function Ticket() {
                     ))}
                 </tbody>
             </table>
+            <div className={cx('button')}>
+                <button className={cx('button_left')} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span className={cx('button_pageNumber')}>Page {currentPage} of {totalPages}</span>
+                <button className={cx('button_right')} onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 }

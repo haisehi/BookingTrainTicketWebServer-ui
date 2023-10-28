@@ -9,7 +9,7 @@ const apiURL = process.env.REACT_APP_API_URL
 function Room() {
 
     const [data, setData] = useState([]);
-    const [formData, setFormData] = useState({ roomNumber: '', countChair: '', kind: '', train: '' });
+    const [formData, setFormData] = useState({ roomNumber: '', countChair: '', kind: '', train: '',nameTrain:'' });
     const [editingIndex, setEditingIndex] = useState(null);
     const [trainList, setTrainList] = useState([]); // State để lưu danh sách tàu
 
@@ -32,7 +32,7 @@ function Room() {
             .then((newRoom) => {
                 // Cập nhật danh sách tàu hỏa sau khi thêm thành công
                 setData([...data, newRoom]);
-                setFormData({ roomNumber: '', countChair: '', kind: '', train: '' });
+                setFormData({ roomNumber: '', countChair: '', kind: '', train: '',nameTrain:'' });
             })
             .catch((error) => console.error(error));
     };
@@ -64,7 +64,7 @@ function Room() {
             .catch((error) => console.error(error));
     };
     //hàm này dùng để xem tên của tàu theo _id
-    const findTrainNameById = (trainId) => {
+    const findTrainById = (trainId) => {
         const train = trainList.find(train => train._id === trainId);
         return train ? train.train : "Unknown";
     }
@@ -82,7 +82,7 @@ function Room() {
                 });
                 console.log(ticket);
 
-                alert(`Room number: ${rooms.roomNumber},count Chair: ${rooms.countChair}, Kind: ${rooms.kind},train:${rooms.train}, ticket: [${ticket.join(', ')} ]`);
+                alert(`Room number: ${rooms.roomNumber},count Chair: ${rooms.countChair}, Kind: ${rooms.kind},train:${rooms.train},nameTrain:${rooms.nameTrain}, ticket: [${ticket.join(', ')} ]`);
             })
             .catch((error) => console.error(error));
     };
@@ -114,7 +114,7 @@ function Room() {
                 updatedData[editingIndex] = updatedTrain;
                 setData(updatedData);
                 setEditingIndex(null);
-                setFormData({ roomNumber: '', countChair: '', kind: '', train: '' });
+                setFormData({ roomNumber: '', countChair: '', kind: '', train: '',nameTrain:'' });
             })
             .catch((error) => console.error(error));
     };
@@ -143,7 +143,7 @@ function Room() {
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Room Number</label>
                         <input
-                            type="text"
+                            type="number"
                             name="roomNumber"
                             placeholder="Room Number"
                             value={formData.roomNumber}
@@ -182,6 +182,21 @@ function Room() {
                     <div className={cx('train-input')}>
                         <label className={cx('train-label')}>Train</label>
                         <select
+                            name="nameTrain"
+                            value={formData.nameTrain}
+                            onChange={handleInputChange}
+                        >
+                            <option value="">Choice Train</option>
+                            {trainList.map((items, index) => (
+                                <option key={index} value={items.nameTrain}>
+                                    {items.train}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className={cx('train-input')}>
+                        <label className={cx('train-label')}>Name Train</label>
+                        <select
                             name="train"
                             value={formData.train}
                             onChange={handleInputChange}
@@ -193,13 +208,6 @@ function Room() {
                                 </option>
                             ))}
                         </select>
-                        {/* <input
-                            type="text"
-                            name="train"
-                            placeholder="train"
-                            value={formData.train}
-                            onChange={handleInputChange}
-                        /> */}
                     </div>
                 </div>
 
@@ -221,6 +229,7 @@ function Room() {
                         <th>Count Chair</th>
                         <th>Kind</th>
                         <th>Train</th>
+                        <th>Train Name</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -230,7 +239,8 @@ function Room() {
                             <td>{item.roomNumber}</td>
                             <td>{item.countChair}</td>
                             <td>{item.kind}</td>
-                            <td>{findTrainNameById(item.train)}</td>
+                            <td>{findTrainById(item.train)}</td>
+                            <td>{item.nameTrain}</td>
                             <td>
                                 <button className={cx('train-btn2')} onClick={() => handleEdit(index)}>Edit</button>
                                 <button className={cx('train-btn3')} onClick={() => handleViewARoom(item._id)}>View</button>

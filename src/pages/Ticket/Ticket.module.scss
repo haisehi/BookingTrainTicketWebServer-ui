@@ -35,10 +35,16 @@
     & span{
         margin-right: 50px;
     }
+    
 }
 .train-label{
     width: 30%;
     padding-left: 20px;
+}
+.custom-select{
+    height: 30px; /* Đặt chiều cao mong muốn */
+    overflow-y: auto; /* Tạo thanh cuộn khi nội dung vượt quá chiều cao */
+    max-height: 50px; /* Giới hạn độ cao tối đa trước khi xuất hiện thanh cuộn */
 }
 .train-btn{
     width: 70%;

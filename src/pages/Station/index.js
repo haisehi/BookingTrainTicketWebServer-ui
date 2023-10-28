@@ -1,4 +1,4 @@
-import { useState} from "react";
+import { useState } from "react";
 
 import classNames from "classnames/bind";
 import styles from "./Chair.module.scss"
@@ -8,9 +8,26 @@ const apiURL = process.env.REACT_APP_API_URL
 
 function Station() {
     const [data, setData] = useState([]);
-    const [formData, setFormData] = useState({ NameStation: '' });
+    const [formData, setFormData] = useState({ NameStation: '', address: '' });
     const [editingIndex, setEditingIndex] = useState(null);
 
+    //pages
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10; // Số lượng mục trên mỗi trang
+    // Hàm để lọc dữ liệu dựa trên trang hiện tại
+    const totalPages = Math.ceil(data.length / itemsPerPage);
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    const currentData = data.slice(startIndex, endIndex);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+
+    //REST API
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
@@ -30,7 +47,7 @@ function Station() {
             .then((newTrain) => {
                 // Cập nhật danh sách tàu hỏa sau khi thêm thành công
                 setData([...data, newTrain]);
-                setFormData({ NameStation: '' });
+                setFormData({ NameStation: '', address: '' });
             })
             .catch((error) => console.error(error));
     };
@@ -94,7 +111,7 @@ function Station() {
                 updatedData[editingIndex] = updatedTrain;
                 setData(updatedData);
                 setEditingIndex(null);
-                setFormData({ NameStation: '' });
+                setFormData({ NameStation: '', address: '' });
             })
             .catch((error) => console.error(error));
     };
@@ -130,6 +147,16 @@ function Station() {
                             onChange={handleInputChange}
                         />
                     </div>
+                    <div className={cx('train-input')}>
+                        <label className={cx('train-label')}>Address</label>
+                        <input
+                            type="text"
+                            name="address"
+                            placeholder="address"
+                            value={formData.address}
+                            onChange={handleInputChange}
+                        />
+                    </div>
                 </div>
 
                 <div className={cx('train-btn')}>
@@ -147,13 +174,15 @@ function Station() {
                 <thead>
                     <tr>
                         <th>Name Station</th>
+                        <th>Address</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => (
+                    {currentData.map((item, index) => (
                         <tr key={index}>
                             <td>{item.NameStation}</td>
+                            <td>{item.address}</td>
                             <td>
                                 <button className={cx('train-btn2')} onClick={() => handleEdit(index)}>Edit</button>
                                 <button className={cx('train-btn3')} onClick={() => handleViewAStation(item._id)}>View</button>
@@ -163,6 +192,15 @@ function Station() {
                     ))}
                 </tbody>
             </table>
+            <div className={cx('button')}>
+                <button className={cx('button_left')} onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <span className={cx('button_pageNumber')}>Page {currentPage} of {totalPages}</span>
+                <button className={cx('button_right')} onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 }
