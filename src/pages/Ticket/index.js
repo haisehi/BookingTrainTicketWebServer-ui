@@ -166,7 +166,8 @@ function Ticket() {
     }
     //----------------------------------------------------------------
     //xong
-    const handleEdit = (index) => {
+    const handleEdit = (trainId) => {
+        const index = data.findIndex((item) => item._id === trainId);
         setEditingIndex(index);
         setFormData(data[index]);
     };
@@ -215,20 +216,24 @@ function Ticket() {
             .catch((error) => console.error(error));
     };
     //xong
-    const handleDelete = (index) => {
-        // Lấy _id của tàu cần xóa từ data
-        const ticketIDToDelete = data[index]._id;
-        // Gửi yêu cầu DELETE đến máy chủ
-        fetch(`${apiURL}/v1/tickets/${ticketIDToDelete}`, {
-            method: 'DELETE',
-        })
-            .then(() => {
-                // Xóa tàu khỏi danh sách trong trạng thái (state) của ứng dụng React
-                const updatedData = [...data];
-                updatedData.splice(index, 1);
-                setData(updatedData);
+    const handleDelete = (ticketsID) => {
+        // Tìm chỉ mốc index dựa trên _id
+        const index = data.findIndex((item) => item._id === ticketsID);
+
+        // Kiểm tra nếu index hợp lệ
+        if (index !== -1) {
+            // Gửi yêu cầu DELETE đến máy chủ để xóa tàu
+            fetch(`${apiURL}/v1/tickets/${ticketsID}`, {
+                method: 'DELETE',
             })
-            .catch((error) => console.error(error));
+                .then(() => {
+                    // Xóa tàu khỏi danh sách trong trạng thái (state) của ứng dụng React
+                    const updatedData = [...data];
+                    updatedData.splice(index, 1);
+                    setData(updatedData);
+                })
+                .catch((error) => console.error(error));
+        }
     };
 
 
@@ -464,9 +469,9 @@ function Ticket() {
                             <td>{item.kind}</td>
                             <td>{findRoomID(item.rooms)}</td>
                             <td>
-                                <button className={cx('train-btn2')} onClick={() => handleEdit(index)}>Edit</button>
+                                <button className={cx('train-btn2')} onClick={() => handleEdit(item._id)}>Edit</button>
                                 <button className={cx('train-btn3')} onClick={() => handleViewATicket(item._id)}>View</button>
-                                <button className={cx('train-btn4')} onClick={() => handleDelete(index)}>Delete</button>
+                                <button className={cx('train-btn4')} onClick={() => handleDelete(item._id)}>Delete</button>
                             </td>
                         </tr>
                     ))}

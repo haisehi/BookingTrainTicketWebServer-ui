@@ -13,7 +13,7 @@ function Station() {
 
     //pages
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 10; // Số lượng mục trên mỗi trang
+    const itemsPerPage = 15; // Số lượng mục trên mỗi trang
     // Hàm để lọc dữ liệu dựa trên trang hiện tại
     const totalPages = Math.ceil(data.length / itemsPerPage);
 
@@ -82,10 +82,12 @@ function Station() {
     };
 
     //xong
-    const handleEdit = (index) => {
+    const handleEdit = (trainId) => {
+        const index = data.findIndex((item) => item._id === trainId);
         setEditingIndex(index);
         setFormData(data[index]);
     };
+
     //xong
     const handleUpdate = (e) => {
         e.preventDefault();
@@ -116,21 +118,26 @@ function Station() {
             .catch((error) => console.error(error));
     };
     //xong
-    const handleDelete = (index) => {
-        // Lấy _id của tàu cần xóa từ data
-        const trainIdToDelete = data[index]._id;
-        // Gửi yêu cầu DELETE đến máy chủ
-        fetch(`${apiURL}/v1/station/${trainIdToDelete}`, {
-            method: 'DELETE',
-        })
-            .then(() => {
-                // Xóa tàu khỏi danh sách trong trạng thái (state) của ứng dụng React
-                const updatedData = [...data];
-                updatedData.splice(index, 1);
-                setData(updatedData);
+    const handleDelete = (trainId) => {
+        // Tìm chỉ mốc index dựa trên _id
+        const index = data.findIndex((item) => item._id === trainId);
+
+        // Kiểm tra nếu index hợp lệ
+        if (index !== -1) {
+            // Gửi yêu cầu DELETE đến máy chủ để xóa tàu
+            fetch(`${apiURL}/v1/station/${trainId}`, {
+                method: 'DELETE',
             })
-            .catch((error) => console.error(error));
+                .then(() => {
+                    // Xóa tàu khỏi danh sách trong trạng thái (state) của ứng dụng React
+                    const updatedData = [...data];
+                    updatedData.splice(index, 1);
+                    setData(updatedData);
+                })
+                .catch((error) => console.error(error));
+        }
     };
+
 
     return (
         <div className={cx('train-container')}>
@@ -184,9 +191,9 @@ function Station() {
                             <td>{item.NameStation}</td>
                             <td>{item.address}</td>
                             <td>
-                                <button className={cx('train-btn2')} onClick={() => handleEdit(index)}>Edit</button>
+                                <button className={cx('train-btn2')} onClick={() => handleEdit(item._id)}>Edit</button>
                                 <button className={cx('train-btn3')} onClick={() => handleViewAStation(item._id)}>View</button>
-                                <button className={cx('train-btn4')} onClick={() => handleDelete(index)}>Delete</button>
+                                <button className={cx('train-btn4')} onClick={() => handleDelete(item._id)}>Delete</button>
                             </td>
                         </tr>
                     ))}
