@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useState , useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import className from "classnames/bind"
 import styles from "./train.module.scss"
@@ -8,6 +10,14 @@ const cx = className.bind(styles)
 const apiURL = process.env.REACT_APP_API_URL
 
 function Train() {
+    // const user = useSelector((state) => state.auth.login?.currentUser)
+    // const navigate = useNavigate()
+    // useEffect(() => {
+    //     if (!user) {
+    //         navigate("/")
+    //     }
+    // }, [])
+
     const [data, setData] = useState([]);
     const [formData, setFormData] = useState({ train: '', countRoom: '' });
     const [editingIndex, setEditingIndex] = useState(null);

@@ -5,7 +5,8 @@ const routes = {
     room:'/room',
     station:'/station',
     ticket:'/ticket',
-    customer:'/customer'
+    customer:'/customer',
+    userAdmin:'/userAdmin'
 }
 
 export default routes

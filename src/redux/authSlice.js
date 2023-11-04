@@ -48,16 +48,16 @@ const authSlice = createSlice({
         },
         //logout
         logoutStart: (state) => {
-            state.logout.isFetching = true //loading thành công
+            state.login.isFetching = true //loading thành công
         },
-        logoutSuccess: (state, action) => {
-            state.logout.isFetching = false;
-            state.logout.currentUser = null //trả về tất cả các thông tin của người dùng
-            state.logout.error = false
+        logoutSuccess: (state) => {
+            state.login.isFetching = false;
+            state.login.currentUser = null //trả về tất cả các thông tin của người dùng
+            state.login.error = false
         },
         logoutFailed: (state) => {
-            state.logout.isFetching = false
-            state.logout.error = true
+            state.login.isFetching = false
+            state.login.error = true
         },
     }
 })

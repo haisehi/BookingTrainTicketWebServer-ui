@@ -10,6 +10,7 @@ import Ticket from '../pages/Ticket'
 import Customer from '../pages/Customer'
 import Login from '../pages/Login'
 import Register from '../pages/Register'
+import UserAdmin from '../pages/UserAdmin'
 
 const PublicRoute = [
     { path: config.routes.login, componet: Login ,layout: LoginLayout },
@@ -18,7 +19,8 @@ const PublicRoute = [
     { path: config.routes.room, componet: Room },
     { path: config.routes.station, componet: Station },
     { path: config.routes.ticket, componet: Ticket },
-    { path: config.routes.customer, componet: Customer }
+    { path: config.routes.customer, componet: Customer },
+    { path: config.routes.userAdmin, componet: UserAdmin }
 ]
 
 const privateRoutes = [
