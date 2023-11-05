@@ -23,8 +23,11 @@ function Ticket() {
             numberChair: '',
             kind: '',
             state: false,
-            rooms: ''
+            rooms: '',
+            img: '' // Thêm trường để lưu đường dẫn của ảnh
         });
+    // Thêm state mới để lưu đường dẫn ảnh
+    const [imageURL, setImageURL] = useState(''); // State để lưu đường dẫn ảnh
     const [editingIndex, setEditingIndex] = useState(null);
     const [RoomList, setRoomList] = useState([]);  // State để lưu danh sách toa
     const [stationList, setstationList] = useState([]);  // State để lưu danh sách toa
@@ -52,21 +55,50 @@ function Ticket() {
             // Kiểm tra nếu checkbox được chọn
             // const newValue = e.target.checked;
             setFormData({ ...formData, [name]: checked });
-        } else {
+        }
+        else if (type === 'file') {
+            // Xử lý trường input loại file
+            // Lấy tệp từ e.target.files[0]
+            setFormData({ ...formData, [name]: e.target.files[0] });
+        }
+        else {
             // Xử lý các trường khác như trước
             setFormData({ ...formData, [name]: value });
         }
     };
-
+    //xong
+    const handleImageUpload = (e) => {
+        const formData = new FormData();
+        formData.append('img', e.target.files[0]);
+    
+        fetch(`${apiURL}/v1/tickets/upload-image`, {
+            method: 'POST',
+            body: formData,
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.imageUrl) {
+                    // Set the img field in the formData
+                    setFormData({
+                        ...formData,
+                        img: data.imageUrl
+                    });
+                    console.log(data.imageUrl);
+                }
+            })
+            .catch((error) => console.error(error));
+    };
+    //xong
     const handleAdd = (e) => {
         e.preventDefault();
+    
         // Gửi yêu cầu POST đến máy chủ
         fetch(`${apiURL}/v1/tickets`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ...formData}),
+            body: JSON.stringify({ ...formData }),
         })
             .then((response) => response.json())
             .then((newTicket) => {
@@ -87,13 +119,13 @@ function Ticket() {
                     numberChair: '',
                     kind: '',
                     state: false,
-                    rooms: ''
+                    rooms: '',
+                    img: '', // Reset the img field
                 });
-                console.log(newTicket)
+                console.log(newTicket);
             })
             .catch((error) => console.error(error));
     };
-
 
     //xong
     const handleView = (e) => {
@@ -210,7 +242,8 @@ function Ticket() {
                     numberChair: '',
                     kind: '',
                     state: false,
-                    rooms: ''
+                    rooms: '',
+                    img: ''
                 });
             })
             .catch((error) => console.error(error));
@@ -235,6 +268,23 @@ function Ticket() {
                 .catch((error) => console.error(error));
         }
     };
+    // Thêm hàm để xử lý sự kiện tải lên ảnh
+    // const handleImageUpload = (e) => {
+    //     const formData = new FormData();
+    //     formData.append('img', e.target.files[0]);
+
+    //     fetch(`${apiURL}/v1/tickets/upload-image`, {
+    //         method: 'POST',
+    //         body: formData,
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             if (data.imageUrl) {
+    //                 setImageURL(data.imageUrl);
+    //             }
+    //         })
+    //         .catch((error) => console.error(error));
+    // };
 
 
     return (
@@ -418,6 +468,14 @@ function Ticket() {
                         </select>
 
                     </div>
+                    <div className={cx('train-input')}>
+                        <label className={cx('train-label')}>Image</label>
+                        <input
+                            type="file"
+                            name="img"
+                            onChange={handleImageUpload}
+                        />
+                    </div>
                 </div>
 
                 <div className={cx('train-btn')}>
@@ -434,6 +492,7 @@ function Ticket() {
             <table>
                 <thead>
                     <tr>
+                        <th>image</th>
                         <th>From</th>
                         <th>To</th>
                         <th>Departure</th>
@@ -454,6 +513,7 @@ function Ticket() {
                 <tbody>
                     {currentData.map((item, index) => (
                         <tr key={index}>
+                            <td>{item.img && <img style={{ height: '50px' }} src={`${apiURL}/${item.img}`} alt="Uploaded" />}</td>
                             <td>{item.from}</td>
                             <td>{item.to}</td>
                             <td>{item.departure}</td>
