@@ -1,7 +1,6 @@
 import classNames from "classnames/bind";
 
 import Header from '../header'
-import SideBar from '../sideBar'
 import styles from "./LoginLayout.module.scss"
 
 const cx = classNames.bind(styles)

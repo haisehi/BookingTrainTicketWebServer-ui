@@ -6,6 +6,8 @@ import { useState } from "react";
 import { loginUserAdmin } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
 
+const cx = classNames.bind(styles)
+
 function Login() {
     const [userName, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -21,15 +23,30 @@ function Login() {
         loginUserAdmin(newUser, dispatch, navigate)
     }
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <label>User name</label>
-                <input placeholder="userName" name="userName" type="tex" onChange={(e) => { setUsername(e.target.value) }} />
-                <label>Password</label>
-                <input placeholder="Password" name="password" type="password" onChange={(e) => { setPassword(e.target.value) }} />
-                <button type="submit">Login</button>
+        <div className={cx('login-container')}>
+            <form className={cx('login-form')} onSubmit={handleSubmit}>
+                <h2>Login</h2>
+                <label className={cx('login-label')}>User name</label>
+                <input
+                    className={cx('login-input')}
+                    placeholder="User Name"
+                    name="userName"
+                    type="text"
+                    onChange={(e) => setUsername(e.target.value)}
+                />
+                <label className={cx('login-label')}>Password</label>
+                <input
+                    className={cx('login-input')}
+                    placeholder="Password"
+                    name="password"
+                    type="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button className={cx('login-button')} type="submit">
+                    Login
+                </button>
+                <Link to="/register"><button className={cx('login-button')}>Register</button></Link>
             </form>
-            <Link to="/register">Register</Link>
         </div>
     );
 }
