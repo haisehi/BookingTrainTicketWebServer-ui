@@ -10,13 +10,6 @@ const cx = className.bind(styles)
 const apiURL = process.env.REACT_APP_API_URL
 
 function Train() {
-    // const user = useSelector((state) => state.auth.login?.currentUser)
-    // const navigate = useNavigate()
-    // useEffect(() => {
-    //     if (!user) {
-    //         navigate("/")
-    //     }
-    // }, [])
 
     const [data, setData] = useState([]);
     const [formData, setFormData] = useState({ train: '', countRoom: '' });
