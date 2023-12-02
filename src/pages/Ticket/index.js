@@ -268,24 +268,6 @@ function Ticket() {
                 .catch((error) => console.error(error));
         }
     };
-    // Thêm hàm để xử lý sự kiện tải lên ảnh
-    // const handleImageUpload = (e) => {
-    //     const formData = new FormData();
-    //     formData.append('img', e.target.files[0]);
-
-    //     fetch(`${apiURL}/v1/tickets/upload-image`, {
-    //         method: 'POST',
-    //         body: formData,
-    //     })
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             if (data.imageUrl) {
-    //                 setImageURL(data.imageUrl);
-    //             }
-    //         })
-    //         .catch((error) => console.error(error));
-    // };
-
 
     return (
         <div className={cx('train-container')}>
